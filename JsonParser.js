@@ -32,7 +32,6 @@ const json_parser = (() => {
     }
 
     const number = () => {
-        let number = null
         let string = ''
         if (ch === '-') {
             string = '-'
@@ -61,7 +60,7 @@ const json_parser = (() => {
                 next()
             }
         }
-        number = +string
+        let number = +string
         if (isNaN(number)) {
             error('Bad Number')
         } else {
@@ -70,9 +69,7 @@ const json_parser = (() => {
     }
 
     const string = () => {
-        let hex = undefined
         let string = ''
-        let uffff = undefined
         if (ch === '"') {
             while (next()) {
                 if (ch === '"') {
@@ -80,11 +77,12 @@ const json_parser = (() => {
                     return string
                 } else if (ch === '\\') {
                     next()
+                    // 解析转义字符
                     if (ch === 'u') {
-                        uffff = 0
+                        let uffff = 0
                         for (let i = 0; i < 4; i++) {
                             let hex = parseInt(next(), 16)
-                            if (isFinite(hex)) {
+                            if (!isFinite(hex)) {
                                 break
                             }
                             uffff = uffff * 16 + hex
@@ -235,9 +233,14 @@ const json_parser = (() => {
     return parse
 }) ()
 
-var jsstr = '{"a": 1,"b": 2}'
+const test = () => {
+    const jsstr = '{"a": 1,"b": 2, "c": "你好", "d": "\\u1B10"}'
 
-var testObj = json_parser(jsstr)
-console.log(testObj)
+    const testObj = json_parser(jsstr)
+    console.log(testObj)
+}
+
+test()
+
 
 
