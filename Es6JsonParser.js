@@ -257,14 +257,14 @@ class JsonParser {
 const test = () => {
     // test parse
     const Parser = new JsonParser()
-    const jsstr = '{"a": 1,"b": 2, "c": "你好", "d": "\\u1B10"}'
-    var testObj = Parser.parse(jsstr)
-    console.log(testObj)
+    const jsonString = '{"a": 1,"b": 2, "c": "你好", "d": "\\u0026"}'
+    const object = Parser.parse(jsonString)
+    console.log('parsed object is: ', object)
 
     // test singleton
     const p1 = new JsonParser()
     const p2 = new JsonParser()
-    console.log(p1 === p2)
+    console.log('singleton is ok: ', p1 === p2)
 }
 
 test()
